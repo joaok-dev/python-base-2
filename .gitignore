@@ -1,0 +1,27 @@
+# Python environment
+.venv/
+
+# Compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE and editor files
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+
+# Test and cache
+*.pytest_cache/
+
