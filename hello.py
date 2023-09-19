@@ -4,7 +4,6 @@
 Depending on the language configured in the envoronment, the script displays the 
 corresponding message.
 
-
 Usage:
 Ensure the LANG variable is properly configured.
 
