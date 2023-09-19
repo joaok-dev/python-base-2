@@ -24,11 +24,11 @@ __author__ = "joaok"
 base = list(range(1, 11))
 result = None
 
-for i in base:
-    print("Multiplication Table of:", i)
+for n1 in base:
+    print(f"Multiplication Table of: {n1}")
     print()
-    for j in base:
-        result = i * j
-        print(result)
+    for n2 in base:
+        result = n1 * n2
+        print(f"{n1} x {n2} = {result}")
     print()
     print()
