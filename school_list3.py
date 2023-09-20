@@ -7,9 +7,19 @@ Print the list of children grouped by room who participate in each of the activi
 __version__ = "0.1.0"
 __author__ = "joaok"
 
-# Initialize lists for students in room1 and room2
-room1 = ["Anthony", "Kevin", "Jennifer", "Angelica", "Sylvia"]
-room2 = ["Timothy", "Jake", "Connie", "Valerie", "Erin"]
+# Initialize a dictionary for students keyed by name and valued by room
+students = {
+    "Anthony": "room1",
+    "Kevin": "room1",
+    "Jennifer": "room1",
+    "Angelica": "room1",
+    "Sylvia": "room1",
+    "Timothy": "room2",
+    "Jake": "room2",
+    "Connie": "room2",
+    "Valerie": "room2",
+    "Erin": "room2",
+}
 
 # Define the classes and the students attending each class
 classes = [
@@ -18,17 +28,16 @@ classes = [
     ("Jazz", ["Timothy", "Jake", "Sylvia", "Angelica", "Erin", "Valerie"]),
 ]
 
-# Loop through each class
+# Loop through each class to find intersecting students from each room
 for class_name, class_list in classes:
-    class_room1 = []
-    class_room2 = []
-
-    # Loop through each student in the class to find their room
-    for student in class_list:
-        if student in room1:
-            class_room1.append(student)
-        elif student in room2:
-            class_room2.append(student)
+    class_room1 = list(
+        set(class_list)
+        & set([student for student, room in students.items() if room == "room1"])
+    )
+    class_room2 = list(
+        set(class_list)
+        & set([student for student, room in students.items() if room == "room2"])
+    )
 
     # Output the results
     print()
