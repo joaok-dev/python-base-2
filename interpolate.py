@@ -1,29 +1,43 @@
-email_tmpl = """
-Hello, %(name)s
+import os
+import sys
 
-Are you interested in purchasing %(product)s?
+# Check the number of arguments and assign filenames accordingly
+arguments = sys.argv
+if len(arguments) == 1:
+    print("Email list and email template not found.")
+    print("Insert the command with the name of the files.")
+    print("Ex: interpolate.py email.txt email_tmpl.txt")
+    sys.exit(1)
+elif len(arguments) != 3:
+    print("Invalid Number of Arguments")
+    print("Insert the command with the name of the files.")
+    print("Ex: interpolate.py email.txt email_tmpl.txt")
+    sys.exit(1)
 
-This product is great for solving 
-%(text)s
+filename, templatename = arguments[1], arguments[2]
 
-Click here now %(link)s
+# Build full file paths
+filepath = os.path.join(os.curdir, filename)
+templatepath = os.path.join(os.curdir, templatename)
 
-Only %(amount)d available!
+# Read the template only once
+with open(templatepath) as f:
+    template = f.read()
 
-Sales price %(price).2f
-"""
+# Process each line in the customer email file
+with open(filepath) as f:
+    for line in f:
+        name, email = line.strip().split(",")  # strip to remove trailing newline
 
-customers = ["Maria", "Joao", "Jose"]
-
-for customer in customers:
-    print(
-        email_tmpl
-        % {
-            "name": customer,
-            "product": "pen",
-            "text": "Write very well",
-            "link": "https://coolpens.com",
-            "amount": 1,
-            "price": 50.5,
-        }
-    )
+        print(f"Sending email to {email}\n")
+        print(
+            template.format(
+                name=name,
+                product="pen",
+                text="Writes very well",
+                link="https://coolpens.com",
+                amount=1,
+                price=50.5,
+            )
+        )
+        print("-" * 50)

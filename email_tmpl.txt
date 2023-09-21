@@ -1,0 +1,12 @@
+Hello, {name}
+
+Are you interested in purchasing {product}?
+
+This product is great for solving 
+{text}.
+
+Click here now {link}
+
+Only {amount} available!
+
+Sales price {price}!

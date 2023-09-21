@@ -24,11 +24,15 @@ Operation: sum
 Operand 1: 5
 Operand 2: 4
 Output: 9
+
+The results will be saved in `prefixcalc.log`
 """
 __version__ = "0.1.0"
 __author__ = "joaok"
 
+import os
 import sys
+from datetime import datetime
 
 # Get command line arguments or ask the user for inputs
 arguments = sys.argv[1:]
@@ -90,6 +94,14 @@ elif operation == "mul":
     result = operand1 * operand2
 elif operation == "div":
     result = operand1 / operand2  # Note: No zero-division check yet
+
+path = os.curdir
+filepath = os.path.join(path, "prefixcalc.log")
+timestamp = datetime.now().isoformat()
+user = os.getenv("USER", "anonymous")
+
+with open(filepath, "a") as f:
+    f.write(f"{timestamp} - {user} - {operation}, {operand1}, {operand2} = {result}\n")
 
 # Print the calculated result
 print(f"The result is {result}")
