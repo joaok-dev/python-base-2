@@ -16,25 +16,25 @@ __author__ = "joaok"
 import os
 import sys
 
-arguments = sys.argv[1:]
-user_input = arguments[0]
+path = os.curdir
+fiilepath = os.path.join(path, "notes.txt")
 
-validated_user_input = ["new", "read"]
-if user_input not in validated_user_input:
-    print("Invalid Option")
+cmds = ["read", "new"]
+
+arguments = sys.argv[1:]
+
+if not arguments:
+    print("Invalid usage")
     sys.exit(1)
 
-elif user_input == "new":
-    note_title = input("Note title: ")
-    note_content = input("Type your note: ")
+validated_arguments = ["new", "read"]
 
-    path = os.curdir
-    filepath = os.path.join(path, note_title + ".txt")
+if arguments not in validated_arguments:
+    print("Invalid Argument")
+    sys.exit(1)
 
-    with open(filepath, "a") as n:
-        n.write(note_content)
+if arguments[0] == "read":
+    ...
 
-elif user_input == "read":
-    user_tag = arguments[1]
-    tag = user_tag.rsplit("=")[1]
+if arguments[0] == "new":
     ...
