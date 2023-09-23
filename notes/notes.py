@@ -13,22 +13,28 @@ $ notes.py read --tag=tech
 __version__ = "0.1.0"
 __author__ = "joaok"
 
+import os
 import sys
 
 arguments = sys.argv[1:]
+user_input = arguments[0]
 
-if not arguments:
-    print("Invalid usage")
+validated_user_input = ["new", "read"]
+if user_input not in validated_user_input:
+    print("Invalid Option")
     sys.exit(1)
 
-validated_arguments = ["new", "read"]
+elif user_input == "new":
+    note_title = input("Note title: ")
+    note_content = input("Type your note: ")
 
-if arguments not in validated_arguments:
-    print("Invalid Argument")
-    sys.exit(1)
+    path = os.curdir
+    filepath = os.path.join(path, note_title + ".txt")
 
-if arguments[0] == "read":
-    ...
+    with open(filepath, "a") as n:
+        n.write(note_content)
 
-if arguments[0] == "new":
+elif user_input == "read":
+    user_tag = arguments[1]
+    tag = user_tag.rsplit("=")[1]
     ...
