@@ -34,7 +34,15 @@ import os
 import sys
 from datetime import datetime
 
-# Get command line arguments or ask the user for inputs
+# Dictionary for mapping operations to actual Python operations
+operation_dict = {
+    "sum": lambda x, y: x + y,
+    "sub": lambda x, y: x - y,
+    "mul": lambda x, y: x * y,
+    "div": lambda x, y: x / y,
+}
+
+# Get command line arguments from the user
 arguments = sys.argv[1:]
 
 # No CLI arguments provided, ask user for inputs
@@ -43,69 +51,62 @@ if not arguments:
     operand1 = input("Operand 1:")
     operand2 = input("Operand 2:")
     arguments = [operation, operand1, operand2]
-# Verify correct number of CLI arguments, exit if incorrect
+# Verify ocorrect number of CLI arguments, exit if incorret
 elif len(arguments) != 3:
     print("Incorrect number of arguments")
-    print("Ex: `sum 5 5`")
+    print("Ex: sum 5 5")
     sys.exit(1)
 
 # Extract operation and operands
 operation, *operands = arguments
 
-# List of allowed operations
-valid_operations = ("sum", "sub", "mul", "div")
-
-# Validate the provided operation, exit if invalid
-if operation not in valid_operations:
+# Validate the provided operation using EAFP, exit if invalid
+try:
+    operation_func = operation_dict[operation]
+except KeyError:
     print("Invalid Operation")
-    print(valid_operations)
+    print(list(operation_dict.keys()))
     sys.exit(1)
 
-# TODO: While repetition + exceptions
 # Empty list to hold validated operands
 validated_operands = []
 
-# Validate operands and type-cast them
+# Validate operands using EAFP and type-cast them
 for operand in operands:
-    # Check if operand is a valid number, exit if not
-    if not operand.isdigit():
+    try:
+        # Try type casting to float first (it will work for intgers too)
+        operand = float(operand)
+        # If it's actually an integer, cas it to int
+        if operand.is_integer():
+            operand = int(operand)
+    except ValueError:
         print(f"Invalid number {operand}")
         sys.exit(1)
 
-    # Type cast to float or int based on the value
-    if "." in operand:
-        operand = float(operand)
-    else:
-        operand = int(operand)
+    validated_operands.append(operand)
 
-    validated_operands.append(operand)  # Append the validated operand to the list
-
+# Try unpacking operands and perform operation using EAFP
 try:
-    # Extract the validated operands
     operand1, operand2 = validated_operands
-except ValueError as e:
-    print(str(e))
+    result = operation_func(operand1, operand2)
+except ValueError:
+    print("Error unpacking operands")
+    sys.exit(1)
+except ZeroDivisionError:
+    print("Division by zero is not allowed")
     sys.exit(1)
 
-
-# TODO: Use function dicts
-# Perform the operation based on the provided operator
-if operation == "sum":
-    result = operand1 + operand2
-elif operation == "sub":
-    result = operand1 - operand2
-elif operation == "mul":
-    result = operand1 * operand2
-elif operation == "div":
-    result = operand1 / operand2  # Note: No zero-division check yet
-
+# File writing using EAFP
 path = os.curdir
 filepath = os.path.join(path, "prefixcalc.log")
 timestamp = datetime.now().isoformat()
 user = os.getenv("USER", "anonymous")
 
-with open(filepath, "a") as f:
-    f.write(f"{timestamp} - {user} - {operation}, {operand1}, {operand2} = {result}\n")
+try:
+    with open(filepath, "a") as f:
+        f.write(f"{timestamp} - {user} - {operation}, {operand1}, {operand2}")
+except (FileNotFoundError, PermissionError):
+    print("Could not write to log file")
 
 # Print the calculated result
 print(f"The result is {result}")

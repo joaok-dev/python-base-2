@@ -38,8 +38,16 @@ arguments = {
 # Loop through the command line arguments starting from index 1
 # (ignoring the script name).
 for arg in sys.argv[1:]:
-    # TODO: Handle ValueError
-    key, value = arg.split("=")
+    try:
+        key, value = arg.split("=")
+    except ValueError as e:
+        # TODO: Handle it with Logging
+        print(f"[ERROR] {str(e)}")
+        print("You need to use `=`")
+        print(f"You insert {arg}")
+        print("Try with --key=value")
+        sys.exit(1)
+
     # Remove leading hyphens and whitespace from the key.
     key = key.lstrip("-").strip()
     # Strip whitespace from the value.
@@ -75,6 +83,12 @@ msg = {
     "es_ES": "Hola, Mundo!",
     "fr_FR": "Bonjour, Monde!",
 }
+try:
+    message = msg[current_language]
+except KeyError as e:
+    print(f"[ERROR] {str(e)}")
+    print(f"Languange invalid, chose from: {list(msg.keys())}")
+    sys.exit(1)
 
 # Print the greeting message.
-print(msg[current_language] * int(arguments["count"]))
+print(message * int(arguments["count"]))
