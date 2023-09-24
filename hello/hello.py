@@ -26,8 +26,19 @@ __license__ = "Unlicense"
 
 # Import the os and sys modules for environment variable and
 # command line argument handling.
+import logging
 import os
 import sys
+
+log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
+log = logging.Logger(__name__, log_level)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+fmt = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s"
+)
+ch.setFormatter(fmt)
+log.addHandler(ch)
 
 # Initialize a dictionary to hold the command-line arguments.
 arguments = {
@@ -41,11 +52,7 @@ for arg in sys.argv[1:]:
     try:
         key, value = arg.split("=")
     except ValueError as e:
-        # TODO: Handle it with Logging
-        print(f"[ERROR] {str(e)}")
-        print("You need to use `=`")
-        print(f"You insert {arg}")
-        print("Try with --key=value")
+        log.error("You need to use `=`, you typed %s, try --key=value: %s", arg, str(e))
         sys.exit(1)
 
     # Remove leading hyphens and whitespace from the key.
